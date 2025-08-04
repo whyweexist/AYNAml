@@ -1,0 +1,51 @@
+# Deep Learning Framework
+torch
+torchvision
+torchaudio
+
+# Data Processing
+numpy
+pandas
+opencv-python
+Pillow
+scikit-image
+
+# Visualization
+matplotlib
+seaborn
+
+# Machine Learning Utilities
+scikit-learn
+scipy
+
+# Experiment Tracking
+wandb
+
+# Progress Bars
+tqdm
+
+# Jupyter Notebook Support
+jupyter
+ipykernel
+ipywidgets
+
+# Data Format Support
+h5py
+
+# Argument Parsing
+argparse
+
+# File Operations
+pathlib
+
+# Additional Utilities
+imageio
+albumentations  # Advanced augmentations (optional)
+
+# For synthetic data generation
+shapely  # Geometric operations (optional)
+
+# Development Tools (optional)
+pytest
+black
+flake8

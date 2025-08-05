@@ -169,24 +169,37 @@ def generate_synthetic_polygon(shape_type: str, color: str, size: int = 256):
     
     # Color mapping
     color_map = {
-        'red': (255, 0, 0), 'blue': (0, 0, 255), 'green': (0, 255, 0),
-        'yellow': (255, 255, 0), 'purple': (128, 0, 128), 'orange': (255, 165, 0),
-        'pink': (255, 192, 203), 'brown': (165, 42, 42), 'black': (0, 0, 0), 'white': (255, 255, 255)
+        'red': (0, 0, 255), 'blue': (255, 0, 0), 'green': (0, 255, 0),  # Note: OpenCV uses BGR
+        'yellow': (0, 255, 255), 'purple': (128, 0, 128), 'orange': (0, 165, 255),
+        'pink': (203, 192, 255), 'brown': (42, 42, 165), 'black': (0, 0, 0), 'white': (255, 255, 255)
     }
     
-    color_rgb = color_map.get(color, (255, 0, 0))
+    color_bgr = color_map.get(color, (0, 0, 255))  # Default to red
     center = (size // 2, size // 2)
     
     if shape_type == 'triangle':
         pts = np.array([[center[0], center[1] - 80],
                        [center[0] - 70, center[1] + 60],
                        [center[0] + 70, center[1] + 60]], np.int32)
-        cv2.fillPoly(img, [pts], color_rgb)
+        if color == 'white':
+            cv2.polylines(img, [pts], True, color_bgr, 3)  # Outline only
+        else:
+            cv2.fillPoly(img, [pts], color_bgr)
+            
     elif shape_type == 'square':
-        cv2.rectangle(img, (center[0] - 60, center[1] - 60), 
-                     (center[0] + 60, center[1] + 60), color_rgb, -1)
+        if color == 'white':
+            cv2.rectangle(img, (center[0] - 60, center[1] - 60), 
+                         (center[0] + 60, center[1] + 60), color_bgr, 3)  # Outline only
+        else:
+            cv2.rectangle(img, (center[0] - 60, center[1] - 60), 
+                         (center[0] + 60, center[1] + 60), color_bgr, -1)
+            
     elif shape_type == 'circle':
-        cv2.circle(img, center, 70, color_rgb, -1)
+        if color == 'white':
+            cv2.circle(img, center, 70, color_bgr, 3)  # Outline only
+        else:
+            cv2.circle(img, center, 70, color_bgr, -1)
+            
     elif shape_type == 'hexagon':
         pts = []
         for i in range(6):
@@ -195,13 +208,31 @@ def generate_synthetic_polygon(shape_type: str, color: str, size: int = 256):
             y = int(center[1] + 70 * np.sin(angle))
             pts.append([x, y])
         pts = np.array(pts, np.int32)
-        cv2.fillPoly(img, [pts], color_rgb)
+        if color == 'white':
+            cv2.polylines(img, [pts], True, color_bgr, 3)  # Outline only
+        else:
+            cv2.fillPoly(img, [pts], color_bgr)
+            
+    elif shape_type == 'pentagon':
+        pts = []
+        for i in range(5):
+            angle = i * 2 * np.pi / 5 - np.pi / 2
+            x = int(center[0] + 70 * np.cos(angle))
+            y = int(center[1] + 70 * np.sin(angle))
+            pts.append([x, y])
+        pts = np.array(pts, np.int32)
+        if color == 'white':
+            cv2.polylines(img, [pts], True, color_bgr, 3)  # Outline only
+        else:
+            cv2.fillPoly(img, [pts], color_bgr)
     
-    return img
+    # Convert BGR to RGB for consistency
+    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    return img_rgb
 
 if __name__ == "__main__":
     # Test the dataset
-    data_dir = "./dataset"  # Update this path
+    data_dir = "path/to/dataset"  # Update this path
     
     # This would work if dataset is available
     try:

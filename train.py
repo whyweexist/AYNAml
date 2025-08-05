@@ -284,4 +284,4 @@ class PolygonColorTrainer:
             
             self.save_checkpoint(epoch, val_loss, is_best)
             
-            print(f"Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.
+            print(f"Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
